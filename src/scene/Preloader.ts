@@ -10,7 +10,7 @@ export default class Preloader extends Phaser.Scene {
 
     preload() {
         this.load.image(TextureKeys.Background, 'bg_repeat_340x640.png');
-        
+        this.load.image(TextureKeys.MouseHole, 'object_mousehole.png');
         this.load.atlas(TextureKeys.RocketMouse,'spritesheet.png','spritesheet.json');
         
     }

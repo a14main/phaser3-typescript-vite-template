@@ -22,9 +22,10 @@ export default class Game extends Phaser.Scene {
         const mouse = this.physics.add
             .sprite(
                 width * 0.5, 
-                height * 0.5,
+                height - 30,
                 TextureKeys.RocketMouse,
                 'rocketmouse_fly01.png')
+            .setOrigin(0.5,1)    
             .play(AnimationKeys.RocketMouseRun);
 
         const body = mouse.body as Phaser.Physics.Arcade.Body
