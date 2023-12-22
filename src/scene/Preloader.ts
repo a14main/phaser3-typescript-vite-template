@@ -16,8 +16,8 @@ export default class Preloader extends Phaser.Scene {
         this.load.image(TextureKeys.Bookcase1, 'object_bookcase1.png');
         this.load.image(TextureKeys.Bookcase2, 'object_bookcase2.png');
 
-        this.load.atlas(TextureKeys.RocketMouse,'spritesheet.png','spritesheet.json');
-        
+        this.load.atlas(TextureKeys.RocketMouse, 'spritesheet.png', 'spritesheet.json');
+
     }
 
     create() {
@@ -36,7 +36,22 @@ export default class Preloader extends Phaser.Scene {
             frameRate: 10,
             repeat: -1
         });
-        
+        this.anims.create({
+            key: AnimationKeys.RocketFlamesOn,
+            frames: this.anims.generateFrameNames(
+                TextureKeys.RocketMouse,
+                {
+                    start: 1,
+                    end: 2,
+                    prefix: 'flame',
+                    suffix: '.png'
+                }
+
+            ),
+            frameRate: 10,
+            repeat: -1
+
+        });
 
 
         this.scene.start(SceneKeys.Game);
