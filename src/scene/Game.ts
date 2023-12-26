@@ -169,7 +169,9 @@ export default class Game extends Phaser.Scene {
         const scrollX = this.cameras.main.scrollX;
         const rightEdge = scrollX + this.scale.width;
 
-        const width = this.laser.width;
+        const body = this.laser.body as Phaser.Physics.Arcade.StaticBody
+
+        const width = body.width;
 
         if (this.laser.x + width < scrollX) {
             this.laser.x = Phaser.Math.Between(
@@ -177,6 +179,9 @@ export default class Game extends Phaser.Scene {
                 rightEdge + width + 1000
             );
             this.laser.y = Phaser.Math.Between(0,300);
+
+            body.position.x = this.laser.x + body.offset.x;
+            body.position.y = this.laser.y + body.offset.y;
         }
     }
 }
