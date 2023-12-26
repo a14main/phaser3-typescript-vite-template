@@ -3,6 +3,7 @@ import TextureKeys from '../consts/TextureKeys';
 import SceneKeys from '../consts/SceneKeys';
 import AnimationKeys from '../consts/AnimationKeys';
 import RocketMouse from '../game/RocketMouse';
+import LaserObstacle from '../game/LaserObstacle';
 
 export default class Game extends Phaser.Scene {
     constructor() 
@@ -16,6 +17,7 @@ export default class Game extends Phaser.Scene {
     private window2!: Phaser.GameObjects.Image
     private bookcase1!: Phaser.GameObjects.Image
     private bookcase2!: Phaser.GameObjects.Image
+    private laser!: LaserObstacle
 
     private windows: Phaser.GameObjects.Image[] = [];
     private bookcases: Phaser.GameObjects.Image[] = [];
@@ -65,6 +67,8 @@ export default class Game extends Phaser.Scene {
 
         this.bookcases = [this.bookcase1, this.bookcase2];
 
+        this.laser = new LaserObstacle(this, 900, 100);
+        this.add.existing(this.laser);
 
         const mouse = new RocketMouse(this, width * 0.5, height - 30);
         this.add.existing(mouse);
@@ -75,6 +79,7 @@ export default class Game extends Phaser.Scene {
         this.cameras.main.startFollow(mouse);
         this.cameras.main.setBounds(0,0,Number.MAX_SAFE_INTEGER,height-30);
 
+        
         this.physics.world.setBounds(0,0,Number.MAX_SAFE_INTEGER, height-30);
     }
 
@@ -83,6 +88,7 @@ export default class Game extends Phaser.Scene {
         this.wrapMouseHole();
         this.wrapWindows();
         this.wrapBookcases();
+        this.wrapLaser();
         
     }
 
@@ -156,6 +162,21 @@ export default class Game extends Phaser.Scene {
             });
             this.bookcase2.visible = !overlap;
         
+        }
+    }
+
+    private wrapLaser() {
+        const scrollX = this.cameras.main.scrollX;
+        const rightEdge = scrollX + this.scale.width;
+
+        const width = this.laser.width;
+
+        if (this.laser.x + width < scrollX) {
+            this.laser.x = Phaser.Math.Between(
+                rightEdge + width,
+                rightEdge + width + 1000
+            );
+            this.laser.y = Phaser.Math.Between(0,300);
         }
     }
 }
