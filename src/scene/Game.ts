@@ -81,6 +81,8 @@ export default class Game extends Phaser.Scene {
 
         
         this.physics.world.setBounds(0,0,Number.MAX_SAFE_INTEGER, height-30);
+
+        this.physics.add.overlap(this.laser, mouse, this.handleOverlapLaser, undefined, this);
     }
 
     update(t: number, dt: number) {
@@ -183,5 +185,10 @@ export default class Game extends Phaser.Scene {
             body.position.x = this.laser.x + body.offset.x;
             body.position.y = this.laser.y + body.offset.y;
         }
+
+    }
+
+    private handleOverlapLaser(laser: LaserObstacle, mouse: RocketMouse) {
+        mouse.kill();
     }
 }

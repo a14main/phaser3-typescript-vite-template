@@ -66,4 +66,13 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
     enableJetpack(enabled: boolean) {
         this.flames.setVisible(enabled);
     }
+
+    kill() {
+        this.mouse.play(AnimationKeys.RocketMouseDead);
+
+        const body = this.body as Phaser.Physics.Arcade.Body
+        body.setAccelerationY(0);
+        body.setVelocity(1000, 0);
+        this.enableJetpack(false);
+    }
 }
