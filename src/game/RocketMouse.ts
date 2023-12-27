@@ -2,8 +2,6 @@ import Phaser from "phaser";
 
 import TextureKeys from "../consts/TextureKeys";
 import AnimationKeys from "../consts/AnimationKeys";
-import Gameover from "../scene/Gameover";
-import SceneKeys from "../consts/SceneKeys";
 
 enum MouseState {
     Running,
@@ -50,6 +48,8 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
         body.setOffset(-this.mouse.width * 0.5, -this.mouse.height);
 
         this.enableJetpack(false);
+
+        
     }
 
     preUpdate() {
@@ -80,7 +80,8 @@ export default class RocketMouse extends Phaser.GameObjects.Container {
                 break;
             case MouseState.Dead:
                 body.setVelocity(0,0);
-                this.scene.scene.run(SceneKeys.Gameover);
+                this.emit('dead');
+                // this.scene.scene.run(SceneKeys.Gameover);
                 break;
         }
 

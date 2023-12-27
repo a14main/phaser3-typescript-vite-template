@@ -1,14 +1,12 @@
 import Phaser from 'phaser'
 import TextureKeys from '../consts/TextureKeys';
 import SceneKeys from '../consts/SceneKeys';
-import AnimationKeys from '../consts/AnimationKeys';
 import RocketMouse from '../game/RocketMouse';
 import LaserObstacle from '../game/LaserObstacle';
 
 export default class Game extends Phaser.Scene {
-    constructor() 
-    {
-       super(SceneKeys.Game);
+    constructor() {
+        super(SceneKeys.Game);
     }
 
     private background!: Phaser.GameObjects.TileSprite
@@ -24,15 +22,15 @@ export default class Game extends Phaser.Scene {
 
 
     create() {
-        const {width, height} = this.scale;
-        
+        const { width, height } = this.scale;
+
         this.background = this.add
-            .tileSprite(0,0,width,height,TextureKeys.Background)
+            .tileSprite(0, 0, width, height, TextureKeys.Background)
             .setOrigin(0)
-            .setScrollFactor(0,0);
+            .setScrollFactor(0, 0);
 
         this.mouseHole = this.add.image(
-            Phaser.Math.Between(900,1500),
+            Phaser.Math.Between(900, 1500),
             501,
             TextureKeys.MouseHole
         );
@@ -56,14 +54,14 @@ export default class Game extends Phaser.Scene {
             580,
             TextureKeys.Bookcase1
         )
-        .setOrigin(0.5,1);
+            .setOrigin(0.5, 1);
 
         this.bookcase2 = this.add.image(
             Phaser.Math.Between(2900, 3400),
             580,
             TextureKeys.Bookcase2
         )
-        .setOrigin(0.5,1);
+            .setOrigin(0.5, 1);
 
         this.bookcases = [this.bookcase1, this.bookcase2];
 
@@ -77,12 +75,13 @@ export default class Game extends Phaser.Scene {
         body.setCollideWorldBounds(true);
         body.setVelocityX(200);
         this.cameras.main.startFollow(mouse);
-        this.cameras.main.setBounds(0,0,Number.MAX_SAFE_INTEGER,height-30);
+        this.cameras.main.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height - 30);
 
-        
-        this.physics.world.setBounds(0,0,Number.MAX_SAFE_INTEGER, height-30);
+
+        this.physics.world.setBounds(0, 0, Number.MAX_SAFE_INTEGER, height - 30);
 
         this.physics.add.overlap(this.laser, mouse, this.handleOverlapLaser, undefined, this);
+        mouse.on('dead', this.gameOver);
     }
 
     update(t: number, dt: number) {
@@ -91,7 +90,7 @@ export default class Game extends Phaser.Scene {
         this.wrapWindows();
         this.wrapBookcases();
         this.wrapLaser();
-        
+
     }
 
     private wrapMouseHole() {
@@ -132,7 +131,7 @@ export default class Game extends Phaser.Scene {
                 return Math.abs(this.window2.x - bc.x) <= this.window2.width;
             });
             this.window2.visible = !overlap;
-        
+
         }
     }
 
@@ -150,7 +149,7 @@ export default class Game extends Phaser.Scene {
                 return Math.abs(this.bookcase1.x - w.x) <= w.width;
             });
             this.bookcase1.visible = !overlap;
-        
+
         }
 
         width = this.bookcase2.width * 2;
@@ -163,7 +162,7 @@ export default class Game extends Phaser.Scene {
                 return Math.abs(this.bookcase2.x - w.x) <= w.width;
             });
             this.bookcase2.visible = !overlap;
-        
+
         }
     }
 
@@ -180,7 +179,7 @@ export default class Game extends Phaser.Scene {
                 rightEdge + width,
                 rightEdge + width + 1000
             );
-            this.laser.y = Phaser.Math.Between(0,300);
+            this.laser.y = Phaser.Math.Between(0, 300);
 
             body.position.x = this.laser.x + body.offset.x;
             body.position.y = this.laser.y + body.offset.y;
@@ -190,5 +189,9 @@ export default class Game extends Phaser.Scene {
 
     private handleOverlapLaser(laser: LaserObstacle, mouse: RocketMouse) {
         mouse.kill();
+    }
+
+    private gameOver() {
+        this.scene.run(SceneKeys.Gameover);
     }
 }
